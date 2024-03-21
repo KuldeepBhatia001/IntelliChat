@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import JsonResponse
 import openai
+from requests import auth
 
 open_api_key = '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'
 openai.api_key = open_api_key
@@ -29,6 +30,16 @@ def chatbot(request):
     return render(request,  'chatbot.html')
 
 
+def login(request):
+    return render(request, 'login.html')
+
+
+def register(request):
+    return render(request, 'register.html')
+
+
+def logout(request):
+    auth.logout(request)
 
 
 
