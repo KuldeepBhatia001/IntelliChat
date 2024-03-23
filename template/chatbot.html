@@ -4,7 +4,6 @@
 <style>
     body, html {
       height: 100%;
-       background-color: #353567;
     }
 
     .messages-box {
@@ -27,15 +26,13 @@
     }
 
     .sent {
-      background-color: #86a4b9;
+      background-color: #dcf8c6;
       align-self: flex-end;
-      border-radius: 30px;
     }
 
     .received {
-      background-color: #a7a7c5;
+      background-color: #f1f0f0;
       align-self: flex-start;
-      border-radius: 30px;
     }
 
     .message-form {
@@ -62,7 +59,6 @@
       height: 100%;
       display: flex;
       flex-direction: column;
-
     }
   </style>
 {% endblock %}
@@ -71,10 +67,29 @@
 {% block content %}
 <div class="chat-container">
   <div class="card flex-grow-1">
-    <div class="card-header bg-primary text-white" style="text-align: center">Chat</div>
+    <div class="card-header bg-primary text-white" text-align="center">Chat</div>
+    {% if user.is_authenticated %}
+    <div class="card-header bg-primary text-white"><b>Welcome, {{user.username}}</b>   <a style="color: yellow;" href="logout">Logout</a></div>
+    {% else %}
+    <div class="card-header bg-primary text-white"><a style="color: yellow" href="login">Login</a>   <a style="color: yellow; text-align: right" href="register">Register</a></div>
+    {% endif %}
     <div class="card-body messages-box">
 
       <ul class="list-unstyled messages-list">
+
+        {% for chat in chats %}
+          {% if chat.user == request.user %}
+
+            <li class="message sent">
+          <div class="message-text">
+            <div class="message-sender">
+              <b>You</b>
+            </div>
+            <div class="message-content">
+              {{chat.message}}
+            </div>
+          </div>
+        </li>
 
         <li class="message received">
           <div class="message-text">
@@ -82,10 +97,14 @@
               <b>AI Chatbot</b>
             </div>
             <div class="message-content">
-              Hi, I am your AI Chatbot, you can ask me anything.
+              {{chat.response}}
             </div>
           </div>
         </li>
+
+          {% endif %}
+        {% endfor %}
+
       </ul>
 
     </div>
@@ -105,7 +124,7 @@
 </div>
 
 <script>
-   const messagesList = document.querySelector('.messages-list');
+  const messagesList = document.querySelector('.messages-list');
   const messageForm = document.querySelector('.message-form');
   const messageInput = document.querySelector('.message-input');
 
@@ -160,6 +179,4 @@
   });
 
 </script>
-
-
 {% endblock %}
